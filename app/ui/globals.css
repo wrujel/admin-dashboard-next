@@ -8,6 +8,9 @@
   --bgHover: #2e374a;
   --text: white;
   --textSoft: #b7bac1;
+  --primary: #5d57c9;
+  --info: teal;
+  --error: tomato;
 }
 
 * {

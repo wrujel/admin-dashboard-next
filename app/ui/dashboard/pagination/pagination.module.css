@@ -1,0 +1,20 @@
+.container {
+  padding: 10px;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.button {
+  padding: 5px 10px;
+  border-radius: 5px;
+  color: var(--text);
+  border: none;
+  cursor: pointer;
+}
+
+.button:disabled {
+  background-color: var(--bgSoft);
+  color: var(--textSoft);
+  cursor: default;
+}
