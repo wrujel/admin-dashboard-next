@@ -14,8 +14,8 @@ const ProductIdPage = () => {
         <form action="" className={styles.form}>
           <input
             type="text"
-            placeholder="Title"
-            name="title"
+            placeholder="Name"
+            name="name"
             value="iPhone"
             required
           />
