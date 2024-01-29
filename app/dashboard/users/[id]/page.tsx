@@ -13,15 +13,36 @@ const UserIdPage = () => {
       <div className={styles.formContainer}>
         <form action="" className={styles.form}>
           <label>Username</label>
-          <input type="text" name="username" placeholder="John Doe" />
+          <input
+            type="text"
+            name="username"
+            placeholder="Username"
+            required
+            value={"John Doe"}
+          />
           <label>Email</label>
-          <input type="email" name="email" placeholder="john@gmail.com" />
+          <input
+            type="email"
+            name="email"
+            placeholder="Email"
+            value={"john@gmail.com"}
+          />
           <label>Password</label>
-          <input type="password" name="password" placeholder="******" />
+          <input
+            type="password"
+            name="password"
+            placeholder="Password"
+            value={"*******"}
+          />
           <label>Phone</label>
-          <input type="text" name="phone" placeholder="+123456789" />
+          <input
+            type="text"
+            name="phone"
+            placeholder="Phone"
+            value={"+123456789"}
+          />
           <label>Address</label>
-          <textarea name="address" placeholder="Palo Alto" />
+          <textarea name="address" placeholder="Address" value={"Palo Alto"} />
           <label>Is Admin?</label>
           <select name="isAdmin" id="isAdmin">
             <option value="true">Yes</option>
