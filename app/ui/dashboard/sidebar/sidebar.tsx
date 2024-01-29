@@ -25,7 +25,7 @@ const Sidebar = () => {
           <li key={category.id}>
             <span className={styles.category}>{category.title}</span>
             {category.list.map((item) => (
-              <MenuLink key={category.title} {...item} />
+              <MenuLink key={item.title} {...item} />
             ))}
           </li>
         ))}
