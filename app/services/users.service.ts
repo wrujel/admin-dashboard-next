@@ -1,7 +1,7 @@
 import { connectToDB } from "../lib/utils";
 import { User } from "../models/user";
 
-const USERS_PER_PAGE = 3;
+const USERS_PER_PAGE = parseInt(process.env.USERS_PER_PAGE || "10");
 
 export const getUsers = async (query: any, page: any) => {
   const regex = new RegExp(query, "i");
