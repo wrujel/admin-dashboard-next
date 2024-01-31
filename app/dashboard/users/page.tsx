@@ -3,8 +3,13 @@ import styles from "../../ui/dashboard/users/users.module.css";
 import Link from "next/link";
 import Image from "next/image";
 import Pagination from "@/app/ui/dashboard/pagination/pagination";
+import { getUsers } from "@/app/services/users.service";
 
-const UsersPage = () => {
+const UsersPage = async ({ searchParams }: { searchParams: any }) => {
+  const query = searchParams?.search || "";
+  const page = searchParams?.page || "1";
+  const { totalPages, users } = await getUsers(query, page);
+
   return (
     <div className={styles.container}>
       <div className={styles.top}>
@@ -26,39 +31,42 @@ const UsersPage = () => {
         </thead>
 
         <tbody>
-          <tr>
-            <td>
-              <div className={styles.user}>
-                <Image
-                  src="/images/avatar_placeholder.jpg"
-                  alt="avatar"
-                  width={40}
-                  height={40}
-                  className={styles.userImage}
-                />
-                John Doe
-              </div>
-            </td>
-            <td>john@gmail.com</td>
-            <td>13.01.2024</td>
-            <td>Admin</td>
-            <td>active</td>
-            <td>
-              <div className={styles.buttons}>
-                <Link href="/dashboard/users/view">
-                  <button className={`${styles.button} ${styles.view}`}>
-                    View
+          {users.map((user) => (
+            <tr key={user.id}>
+              <td>
+                <div className={styles.userSection}>
+                  <div className={styles.imageWrapper}>
+                    <Image
+                      src={user.img || "/images/avatar_placeholder.jpg"}
+                      alt="avatar"
+                      fill
+                      className={styles.userImage}
+                    />
+                  </div>
+                  {user.username}
+                </div>
+              </td>
+              <td>{user.email}</td>
+              <td>{new Date(user.createdAt).toDateString()}</td>
+              <td>{user.isAdmin ? "Admin" : "User"}</td>
+              <td>{user.isActive ? "Active" : "Inactive"}</td>
+              <td>
+                <div className={styles.buttons}>
+                  <Link href="/dashboard/users/view">
+                    <button className={`${styles.button} ${styles.view}`}>
+                      View
+                    </button>
+                  </Link>
+                  <button className={`${styles.button} ${styles.delete}`}>
+                    Delete
                   </button>
-                </Link>
-                <button className={`${styles.button} ${styles.delete}`}>
-                  Delete
-                </button>
-              </div>
-            </td>
-          </tr>
+                </div>
+              </td>
+            </tr>
+          ))}
         </tbody>
       </table>
-      <Pagination />
+      <Pagination totalPages={totalPages} />
     </div>
   );
 };
