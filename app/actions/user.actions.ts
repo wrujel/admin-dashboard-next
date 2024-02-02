@@ -30,3 +30,16 @@ export const createUser = async (formData: any) => {
   revalidatePath("/dashboard/users");
   redirect("/dashboard/users");
 };
+
+export const deleteUser = async (formData: any) => {
+  const { id } = Object.fromEntries(formData);
+
+  try {
+    connectToDB();
+    await User.findByIdAndDelete(id);
+  } catch (error) {
+    throw new Error("Error deleting user");
+  }
+
+  revalidatePath("/dashboard/users");
+};

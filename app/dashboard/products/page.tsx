@@ -4,6 +4,7 @@ import styles from "../../ui/dashboard/products/products.module.css";
 import Image from "next/image";
 import Pagination from "@/app/ui/dashboard/pagination/pagination";
 import { getProducts } from "@/app/services/products.service";
+import { deleteProduct } from "@/app/actions/product.actions";
 
 const ProductsPage = async ({ searchParams }: { searchParams: any }) => {
   const query = searchParams?.search || "";
@@ -62,9 +63,12 @@ const ProductsPage = async ({ searchParams }: { searchParams: any }) => {
                       View
                     </button>
                   </Link>
-                  <button className={`${styles.button} ${styles.delete}`}>
-                    Delete
-                  </button>
+                  <form action={deleteProduct}>
+                    <input type="hidden" value={product.id} name="id" />
+                    <button className={`${styles.button} ${styles.delete}`}>
+                      Delete
+                    </button>
+                  </form>
                 </div>
               </td>
             </tr>

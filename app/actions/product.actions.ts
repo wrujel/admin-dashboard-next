@@ -26,3 +26,16 @@ export const createProduct = async (formData: any) => {
   revalidatePath("/dashboard/products");
   redirect("/dashboard/products");
 };
+
+export const deleteProduct = async (formData: any) => {
+  const { id } = Object.fromEntries(formData);
+
+  try {
+    connectToDB();
+    await Product.findByIdAndDelete(id);
+  } catch (error) {
+    throw new Error("Error deleting product");
+  }
+
+  revalidatePath("/dashboard/products");
+};
