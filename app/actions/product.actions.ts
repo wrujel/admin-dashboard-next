@@ -39,3 +39,25 @@ export const deleteProduct = async (formData: any) => {
 
   revalidatePath("/dashboard/products");
 };
+
+export const updateProduct = async (formData: any) => {
+  const { id, name, description, price, color, size, stock } =
+    Object.fromEntries(formData);
+
+  try {
+    connectToDB();
+    await Product.findByIdAndUpdate(id, {
+      name,
+      description,
+      price,
+      color,
+      size,
+      stock,
+    });
+  } catch (error) {
+    throw new Error("Error updating product");
+  }
+
+  revalidatePath("/dashboard/products");
+  redirect("/dashboard/products");
+};

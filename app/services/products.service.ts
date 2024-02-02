@@ -18,3 +18,13 @@ export const getProducts = async (query: any, page: any) => {
     throw new Error("Error getting users");
   }
 };
+
+export const getProduct = async (id: string) => {
+  try {
+    connectToDB();
+    const product = await Product.findById(id);
+    return product;
+  } catch (error) {
+    throw new Error("Error getting product");
+  }
+};
