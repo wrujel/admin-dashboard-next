@@ -30,15 +30,32 @@
   border-bottom: 1px solid var(--bgSoft);
 }
 
-.product {
+.productSection {
   display: flex;
   align-items: center;
   gap: 10px;
+  word-break: break-all;
+  min-width: 120px;
+}
+
+.imageWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 40px;
+  height: 40px;
 }
 
 .productImage {
   border-radius: 50%;
+  object-position: top;
   object-fit: cover;
+}
+
+.textRight {
+  display: flex;
+  justify-content: flex-end;
 }
 
 .buttons {

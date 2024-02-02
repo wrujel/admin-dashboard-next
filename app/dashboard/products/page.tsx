@@ -3,12 +3,17 @@ import Link from "next/link";
 import styles from "../../ui/dashboard/products/products.module.css";
 import Image from "next/image";
 import Pagination from "@/app/ui/dashboard/pagination/pagination";
+import { getProducts } from "@/app/services/products.service";
 
-const ProductsPage = () => {
+const ProductsPage = async ({ searchParams }: { searchParams: any }) => {
+  const query = searchParams?.search || "";
+  const page = searchParams?.page || "1";
+  const { totalPages, products } = await getProducts(query, page);
+
   return (
     <div className={styles.container}>
       <div className={styles.top}>
-        <Search placeholder="Search for a user" />
+        <Search placeholder="Search for a product" />
         <Link href="/dashboard/products/add">
           <button className={styles.addButton}>Add New</button>
         </Link>
@@ -26,39 +31,47 @@ const ProductsPage = () => {
         </thead>
 
         <tbody>
-          <tr>
-            <td>
-              <div className={styles.product}>
-                <Image
-                  src="/images/noimage_placeholder.png"
-                  alt="avatar"
-                  width={40}
-                  height={40}
-                  className={styles.productImage}
-                />
-                iPhone
-              </div>
-            </td>
-            <td>Lorem ipsum dolor sit amet.</td>
-            <td>$999.99</td>
-            <td>28.01.24</td>
-            <td>5</td>
-            <td>
-              <div className={styles.buttons}>
-                <Link href="/dashboard/products/view">
-                  <button className={`${styles.button} ${styles.view}`}>
-                    View
+          {products.map((product) => (
+            <tr key={product.id}>
+              <td>
+                <div className={styles.productSection}>
+                  <div className={styles.imageWrapper}>
+                    <Image
+                      src={product.img || "/images/noimage_placeholder.png"}
+                      alt="avatar"
+                      fill
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                      className={styles.productImage}
+                    />
+                  </div>
+                  {product.name}
+                </div>
+              </td>
+              <td>{product.description}</td>
+              <td>
+                <span className={styles.textRight}>${product.price}</span>
+              </td>
+              <td>{new Date(product.createdAt).toDateString()}</td>
+              <td>
+                <span className={styles.textRight}>{product.stock}</span>
+              </td>
+              <td>
+                <div className={styles.buttons}>
+                  <Link href="/dashboard/products/view">
+                    <button className={`${styles.button} ${styles.view}`}>
+                      View
+                    </button>
+                  </Link>
+                  <button className={`${styles.button} ${styles.delete}`}>
+                    Delete
                   </button>
-                </Link>
-                <button className={`${styles.button} ${styles.delete}`}>
-                  Delete
-                </button>
-              </div>
-            </td>
-          </tr>
+                </div>
+              </td>
+            </tr>
+          ))}
         </tbody>
       </table>
-      <Pagination />
+      <Pagination totalPages={totalPages} />
     </div>
   );
 };

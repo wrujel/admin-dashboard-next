@@ -40,6 +40,7 @@ const UsersPage = async ({ searchParams }: { searchParams: any }) => {
                       src={user.img || "/images/avatar_placeholder.jpg"}
                       alt="avatar"
                       fill
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                       className={styles.userImage}
                     />
                   </div>

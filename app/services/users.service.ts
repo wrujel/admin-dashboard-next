@@ -13,7 +13,9 @@ export const getUsers = async (query: any, page: any) => {
     const users = await User.find({ username: { $regex: regex } })
       .limit(USERS_PER_PAGE)
       .skip((page - 1) * USERS_PER_PAGE);
-    const totalPages = Math.floor(countUsers / USERS_PER_PAGE);
+    const totalPages = Math.ceil(countUsers / USERS_PER_PAGE);
+    console.log(totalPages);
+
     return { totalPages, users };
   } catch (error) {
     throw new Error("Error getting users");

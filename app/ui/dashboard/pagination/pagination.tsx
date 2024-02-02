@@ -11,7 +11,7 @@ const Pagination = ({ totalPages }: { totalPages: number }) => {
 
   const page = params.get("page") || "1";
   const hasPrev = parseInt(page) > 1;
-  const hasNext = parseInt(page) <= totalPages;
+  const hasNext = parseInt(page) < totalPages;
 
   const handlePrev = () => {
     params.set("page", (parseInt(page) - 1).toString());
