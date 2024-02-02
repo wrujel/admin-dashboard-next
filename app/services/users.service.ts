@@ -5,17 +5,14 @@ const USERS_PER_PAGE = parseInt(process.env.USERS_PER_PAGE || "10");
 
 export const getUsers = async (query: any, page: any) => {
   const regex = new RegExp(query, "i");
+  const queryRegex = { username: { $regex: regex } };
   try {
     connectToDB();
-    const countUsers = await User.countDocuments({
-      username: { $regex: regex },
-    });
-    const users = await User.find({ username: { $regex: regex } })
+    const countUsers = await User.countDocuments(queryRegex);
+    const users = await User.find(queryRegex)
       .limit(USERS_PER_PAGE)
       .skip((page - 1) * USERS_PER_PAGE);
     const totalPages = Math.ceil(countUsers / USERS_PER_PAGE);
-    console.log(totalPages);
-
     return { totalPages, users };
   } catch (error) {
     throw new Error("Error getting users");

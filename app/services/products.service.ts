@@ -13,8 +13,6 @@ export const getProducts = async (query: any, page: any) => {
       .limit(PRODUCTS_PER_PAGE)
       .skip((page - 1) * PRODUCTS_PER_PAGE);
     const totalPages = Math.ceil(countProducts / PRODUCTS_PER_PAGE);
-    console.log(totalPages);
-
     return { totalPages, products };
   } catch (error) {
     throw new Error("Error getting users");
