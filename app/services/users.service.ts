@@ -18,3 +18,13 @@ export const getUsers = async (query: any, page: any) => {
     throw new Error("Error getting users");
   }
 };
+
+export const getUser = async (id: string) => {
+  try {
+    connectToDB();
+    const user = await User.findById(id);
+    return user;
+  } catch (error) {
+    throw new Error("Error getting user");
+  }
+};

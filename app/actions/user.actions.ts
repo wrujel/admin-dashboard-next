@@ -43,3 +43,28 @@ export const deleteUser = async (formData: any) => {
 
   revalidatePath("/dashboard/users");
 };
+
+export const updateUser = async (formData: any) => {
+  const { id, username, email, password, phone, address, isAdmin, isActive } =
+    Object.fromEntries(formData);
+
+  try {
+    connectToDB();
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+    await User.findByIdAndUpdate(id, {
+      username,
+      email,
+      passwordHash: hashedPassword,
+      phone,
+      address,
+      isAdmin,
+      isActive,
+    });
+  } catch (error) {
+    throw new Error("Error updating user");
+  }
+
+  revalidatePath("/dashboard/users");
+  redirect("/dashboard/users");
+};

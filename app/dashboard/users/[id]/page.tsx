@@ -1,60 +1,71 @@
 import Image from "next/image";
 import styles from "../../../ui/dashboard/users/idUser/idUser.module.css";
+import { getUser } from "@/app/services/users.service";
+import { updateUser } from "@/app/actions/user.actions";
 
-const UserIdPage = () => {
+const UserIdPage = async ({ params }: { params: any }) => {
+  const { id } = params;
+  const user = await getUser(id);
+
   return (
     <div className={styles.container}>
       <div className={styles.infoContainer}>
         <div className={styles.imgContainer}>
-          <Image src="/images/avatar_placeholder.jpg" alt="avatar" fill />
+          <Image
+            src={user.img || "/images/avatar_placeholder.jpg"}
+            alt="avatar"
+            fill
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            className={styles.userImage}
+          />
         </div>
-        John Doe
+        {user.username}
       </div>
       <div className={styles.formContainer}>
-        <form action="" className={styles.form}>
+        <form action={updateUser} className={styles.form}>
           <label>Username</label>
           <input
             type="text"
             name="username"
             placeholder="Username"
             required
-            value={"John Doe"}
+            defaultValue={user.username}
           />
           <label>Email</label>
           <input
             type="email"
             name="email"
             placeholder="Email"
-            value={"john@gmail.com"}
+            defaultValue={user.email}
           />
           <label>Password</label>
-          <input
-            type="password"
-            name="password"
-            placeholder="Password"
-            value={"*******"}
-          />
+          <input type="password" name="password" placeholder="Password" />
           <label>Phone</label>
           <input
             type="text"
             name="phone"
             placeholder="Phone"
-            value={"+123456789"}
+            defaultValue={user.phone}
           />
           <label>Address</label>
-          <textarea name="address" placeholder="Address" value={"Palo Alto"} />
+          <textarea
+            name="address"
+            placeholder="Address"
+            defaultValue={user.address}
+          />
           <label>Is Admin?</label>
-          <select name="isAdmin" id="isAdmin">
+          <select name="isAdmin" id="isAdmin" defaultValue={user.isAdmin}>
             <option value="true">Yes</option>
             <option value="false">No</option>
           </select>
           <label>Is Active?</label>
-          <select name="isActive" id="isActive">
+          <select name="isActive" id="isActive" defaultValue={user.isActive}>
             <option value="true">Yes</option>
             <option value="false">No</option>
           </select>
+          <input type="hidden" value={user.id} name="id" />
           <div className={styles.buttonWrapper}>
-            <button type="submit">Submit</button>
+            <button type="submit">Update</button>
           </div>
         </form>
       </div>
