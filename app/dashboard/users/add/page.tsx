@@ -1,11 +1,12 @@
+import { createUser } from "@/app/actions/createUser";
 import styles from "../../../ui/dashboard/users/addUser/addUser.module.css";
 
 const addUserPage = () => {
   return (
     <div className={styles.container}>
-      <form action="" className={styles.form}>
-        <input type="text" placeholder="Username" name="ser" required />
-        <input type="email" placeholder="Email" name="mail" required />
+      <form action={createUser} className={styles.form}>
+        <input type="text" placeholder="Username" name="username" required />
+        <input type="email" placeholder="Email" name="email" required />
         <input
           type="password"
           placeholder="Password"
@@ -14,16 +15,12 @@ const addUserPage = () => {
         />
         <input type="phone" placeholder="Phone" name="phone" />
         <select name="isAdmin" id="isAdmin">
-          <option value="false" selected>
-            Is Admin?
-          </option>
+          <option value="false">Is Admin?</option>
           <option value="true">Yes</option>
           <option value="false">No</option>
         </select>
         <select name="isActive" id="isActive">
-          <option value="true" selected>
-            Is Active?
-          </option>
+          <option value="true">Is Active?</option>
           <option value="true">Yes</option>
           <option value="false">No</option>
         </select>
