@@ -16,6 +16,15 @@ const nextConfig = {
     USERS_PER_PAGE: "5",
     PRODUCTS_PER_PAGE: "5",
   },
+  async redirects() {
+    return [
+      {
+        source: "/",
+        destination: "/dashboard",
+        permanent: true,
+      },
+    ];
+  },
 };
 
 export default nextConfig;

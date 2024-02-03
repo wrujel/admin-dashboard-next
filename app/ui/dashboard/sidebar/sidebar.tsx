@@ -8,27 +8,25 @@ import { logout } from "@/app/actions/auth.actions";
 import { getUser } from "@/app/services/users.service";
 
 const Sidebar = async () => {
-  const session = await auth();
-  if (!session?.user?.id) {
-    return null;
-  }
-  const user = await getUser(session.user.id);
+  // const session = await auth();
+  // if (!session?.user?.id) {
+  //   return null;
+  // }
+  // const user = await getUser(session.user.id);
 
   return (
     <div className={styles.container}>
       <div className={styles.user}>
         <Image
-          src={(user.img ||= "/images/avatar_placeholder.jpg")}
+          src={"/images/avatar_placeholder.jpg"}
           alt="profile image"
           width={50}
           height={50}
           className={styles.userImage}
         />
         <div className={styles.userDetail}>
-          <span className={styles.username}>{(user.username ||= "Admin")}</span>
-          <span className={styles.userTitle}>
-            {user.isAdmin ? "Administrator" : "User"}
-          </span>
+          <span className={styles.username}>{"Admin"}</span>
+          <span className={styles.userTitle}>{"Administrator"}</span>
         </div>
       </div>
       <ul className={styles.list}>
