@@ -104,7 +104,7 @@ This project is a simple admin dashboard built with Next.js 14, React 18, and Ty
 
 # Try it out
 
-You can try out the dashboard [here](https://admin-dashboard-next.vercel.app/).
+You can try out the dashboard [here](https://admin-dashboard-next-roan.vercel.app/).
 
 # Getting Started
 
