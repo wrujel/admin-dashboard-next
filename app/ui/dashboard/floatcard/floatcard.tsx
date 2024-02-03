@@ -11,6 +11,7 @@ const FloatCard = () => {
             src="/images/rocket.png"
             alt="Rocket"
             fill
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
             className={styles.bg}
           />
         </div>
