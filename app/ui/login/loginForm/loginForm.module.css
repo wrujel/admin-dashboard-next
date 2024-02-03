@@ -1,0 +1,40 @@
+.form {
+  background-color: var(--bgSoft);
+  padding: 50px;
+  border-radius: 10px;
+  width: 500px;
+  height: 500px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 30px;
+}
+
+.title {
+  font-size: 2rem;
+  font-weight: bold;
+  text-align: center;
+}
+
+.form input {
+  padding: 30px;
+  border: 2px solid var(--bgHover);
+  border-radius: 5px;
+  background-color: var(--bg);
+  color: var(--text);
+}
+
+.form button {
+  padding: 30px;
+  background-color: var(--info);
+  color: var(--text);
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.error {
+  color: var(--error);
+  text-align: center;
+  margin-bottom: 15px;
+}
