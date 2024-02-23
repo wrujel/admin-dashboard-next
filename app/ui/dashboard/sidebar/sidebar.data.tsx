@@ -32,7 +32,7 @@ export const menuItems = [
       },
       {
         title: "Transactions",
-        path: "/dashboard/transactions",
+        path: "",
         icon: <MdAttachMoney />,
       },
     ],
@@ -43,17 +43,17 @@ export const menuItems = [
     list: [
       {
         title: "Revenue",
-        path: "/dashboard/revenue",
+        path: "",
         icon: <MdWork />,
       },
       {
         title: "Reports",
-        path: "/dashboard/reports",
+        path: "",
         icon: <MdAnalytics />,
       },
       {
         title: "Teams",
-        path: "/dashboard/teams",
+        path: "",
         icon: <MdPeople />,
       },
     ],

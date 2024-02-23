@@ -15,7 +15,7 @@ const MenuLink = (item: MenuLinkProps) => {
 
   return (
     <Link
-      href={item.path}
+      href={item?.path || "#"}
       className={`${styles.container} ${
         pathName === item.path && styles.active
       }`}
