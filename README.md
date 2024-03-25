@@ -34,7 +34,7 @@
 
 </div>
 
-<div>
+<div align='center'>
   This project is a simple admin dashboard built with Next.js 14, React 18, and TypeScript. It uses Next-auth 5 for authentication, bcrypt for password hashing, and Mongoose for database management. The dashboard also uses Recharts for data visualization and React-icons for icons. The search functionality is implemented using use-debounce.
 
   [Demo](https://admin-dashboard-next-roan.vercel.app/) · [Report issue](/issues) · [Suggest something](/issues)
@@ -144,7 +144,7 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
 [django-rest-framework]: https://img.shields.io/badge/django%20rest-ff1709?style=for-the-badge&logo=django&logoColor=white
 [coreapi]: https://img.shields.io/badge/Coreapi-gray.svg?style=for-the-badge&logo=coreapi
 [bcrypt]: https://img.shields.io/badge/Bcrypt-2A2A2A?style=for-the-badge&logo=npm&logoColor=white
-[recharts]: https://img.shields.io/badge/Recharts-61DAFB?style=for-the-badge&logo=javascript&logoColor=white
+[recharts]: https://img.shields.io/badge/Recharts-gray?style=for-the-badge&logo=javascript&logoColor=white
 [use-debounce]: https://img.shields.io/badge/Use--Debounce-gray?style=for-the-badge&logo=npm&logoColor=white
 
 <!-- Badges links -->
