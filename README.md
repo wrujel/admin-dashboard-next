@@ -16,7 +16,7 @@
     <img
       src='/public/images/screenshot.png'
       alt='Screenshot of the app'
-      width='70%'
+      width='80%'
     />
   </a>
 </div>
