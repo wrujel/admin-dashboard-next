@@ -24,7 +24,7 @@ const FloatCard = () => {
             debitis maxime deserunt sed mollitia, minus nemo illo dolores
             suscipit tempore.
           </p>
-          <button className={styles.button}>
+          <button className={styles.button} disabled>
             <MdPlayCircleFilled />
             Watch
           </button>
@@ -41,7 +41,7 @@ const FloatCard = () => {
             debitis maxime deserunt sed mollitia, minus nemo illo dolores
             suscipit tempore.
           </p>
-          <button className={styles.button}>
+          <button className={styles.button} disabled>
             <MdReadMore />
             Learn
           </button>

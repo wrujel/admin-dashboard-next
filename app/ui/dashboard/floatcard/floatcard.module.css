@@ -60,3 +60,8 @@
 .button:hover {
   background-color: #6f68f1;
 }
+
+.button:disabled {
+  background-color: var(--primary);
+  cursor: default;
+}

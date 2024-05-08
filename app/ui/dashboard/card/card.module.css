@@ -4,7 +4,7 @@
   border-radius: 10px;
   display: flex;
   gap: 20px;
-  cursor: pointer;
+  cursor: default;
   width: 100%;
 }
 
