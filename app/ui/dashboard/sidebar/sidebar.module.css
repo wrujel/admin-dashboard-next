@@ -47,11 +47,8 @@
   align-items: center;
   gap: 10px;
   margin: 5px 0px;
-  cursor: pointer;
+  cursor: default;
   border-radius: 10px;
   width: 100%;
-}
-
-.logout:hover {
-  background-color: var(--bgHover);
+  opacity: 0.5;
 }

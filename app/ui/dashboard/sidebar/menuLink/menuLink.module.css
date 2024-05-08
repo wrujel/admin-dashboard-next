@@ -8,7 +8,12 @@
   border-radius: 10px;
 }
 
-.container:hover,
+.bgActive:hover,
 .active {
   background-color: var(--bgHover);
+}
+
+.disabled {
+  cursor: default;
+  opacity: 0.5;
 }
