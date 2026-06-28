@@ -1,36 +1,24 @@
-import { createUser } from "@/app/actions/user.actions";
-import styles from "../../../ui/dashboard/users/addUser/addUser.module.css";
+import type { Metadata } from "next";
 
-const addUserPage = () => {
+import { createUser } from "@/app/actions/user.actions";
+import { UserForm } from "@/app/ui/users/user-form";
+import { Panel } from "@/app/ui/widgets/panel";
+import { PageHeader } from "@/app/ui/widgets/page-header";
+
+export const metadata: Metadata = { title: "Add user" };
+
+export default function AddUserPage() {
   return (
-    <div className={styles.container}>
-      <form action={createUser} className={styles.form}>
-        <input type="text" placeholder="Username" name="username" required />
-        <input type="email" placeholder="Email" name="email" required />
-        <input
-          type="password"
-          placeholder="Password"
-          name="password"
-          required
-        />
-        <input type="phone" placeholder="Phone" name="phone" />
-        <select name="isAdmin" id="isAdmin">
-          <option value="false">Is Admin?</option>
-          <option value="true">Yes</option>
-          <option value="false">No</option>
-        </select>
-        <select name="isActive" id="isActive">
-          <option value="true">Is Active?</option>
-          <option value="true">Yes</option>
-          <option value="false">No</option>
-        </select>
-        <textarea name="address" id="address" placeholder="Address" rows={1} />
-        <div className={styles.buttonWrapper}>
-          <button type="submit">Submit</button>
-        </div>
-      </form>
+    <div className="space-y-5">
+      <PageHeader
+        title="Add user"
+        description="Invite a new member to your workspace"
+      />
+      <div className="max-w-3xl">
+        <Panel title="User details">
+          <UserForm action={createUser} />
+        </Panel>
+      </div>
     </div>
   );
-};
-
-export default addUserPage;
+}

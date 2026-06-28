@@ -1,12 +1,16 @@
 "use server";
 
-import { signIn, signOut } from "../../auth";
+import { headers } from "next/headers";
+import { redirect } from "next/navigation";
 
-export const authenticate = async (formData: any) => {
-  const { username, password } = Object.fromEntries(formData);
-  await signIn("credentials", { username, password });
-};
+import { auth } from "@/app/lib/auth/auth";
 
+/** Server-side sign out used by the sidebar/user-menu form. */
 export const logout = async () => {
-  await signOut();
+  try {
+    await auth.api.signOut({ headers: await headers() });
+  } catch {
+    // No active session (e.g. demo mode) — fall through to redirect.
+  }
+  redirect("/login");
 };

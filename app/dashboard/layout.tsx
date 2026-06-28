@@ -1,23 +1,18 @@
-import Navbar from "../ui/dashboard/navbar/navbar";
-import Sidebar from "../ui/dashboard/sidebar/sidebar";
-import styles from "../ui/dashboard/dashboard.module.css";
+import { requireUser } from "@/app/lib/auth/dal";
+import { getActivityFeed } from "@/app/lib/data";
+import { DashboardShell } from "@/app/ui/shell/dashboard-shell";
 
-const Layout = ({
+export default async function DashboardLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) => {
-  return (
-    <div className={styles.container}>
-      <div className={styles.menu}>
-        <Sidebar />
-      </div>
-      <div className={styles.content}>
-        <Navbar />
-        {children}
-      </div>
-    </div>
-  );
-};
+}) {
+  const user = await requireUser();
+  const activity = await getActivityFeed(8);
 
-export default Layout;
+  return (
+    <DashboardShell user={user} activity={activity}>
+      {children}
+    </DashboardShell>
+  );
+}

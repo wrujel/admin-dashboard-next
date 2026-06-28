@@ -30,13 +30,17 @@ const productSchema = new mongoose.Schema(
       type: String,
       default: "",
     },
+    category: {
+      type: String,
+      default: "",
+    },
     stock: {
       type: Number,
       required: true,
       min: 0,
     },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 export const Product =

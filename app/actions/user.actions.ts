@@ -1,70 +1,111 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { connectToDB } from "../lib/utils";
-import { User } from "../models/user";
-import { redirect } from "next/navigation";
 import bcrypt from "bcrypt";
 
-export const createUser = async (formData: any) => {
-  const { username, email, password, phone, address, isAdmin, isActive } =
-    Object.fromEntries(formData);
+import { connectToDB } from "../lib/utils";
+import { User } from "../models/user";
+import { requireUser } from "../lib/auth/dal";
+import type { ActionState } from "./action-state";
+
+const hasDb = () => Boolean(process.env.MONGO_URI);
+
+function parse(formData: FormData) {
+  return {
+    username: String(formData.get("username") ?? "").trim(),
+    email: String(formData.get("email") ?? "").trim(),
+    password: String(formData.get("password") ?? ""),
+    phone: String(formData.get("phone") ?? "").trim(),
+    address: String(formData.get("address") ?? "").trim(),
+    isAdmin: formData.get("isAdmin") === "true",
+    isActive: formData.get("isActive") !== "false",
+  };
+}
+
+function validate(p: ReturnType<typeof parse>, requirePassword: boolean) {
+  if (p.username.length < 3) return "Username must be at least 3 characters.";
+  if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(p.email))
+    return "Enter a valid email address.";
+  if (requirePassword && p.password.length < 6)
+    return "Password must be at least 6 characters.";
+  return null;
+}
+
+export async function createUser(
+  _prev: ActionState,
+  formData: FormData,
+): Promise<ActionState> {
+  await requireUser();
+  const data = parse(formData);
+  const error = validate(data, true);
+  if (error) return { status: "error", message: error };
+
+  if (!hasDb())
+    return {
+      status: "success",
+      message: "Invited in demo mode — connect a database to persist.",
+    };
+
   try {
-    connectToDB();
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
-    const newUser = new User({
-      username,
-      email,
-      passwordHash: hashedPassword,
-      phone,
-      address,
-      isAdmin,
-      isActive,
+    await connectToDB();
+    const passwordHash = await bcrypt.hash(data.password, 10);
+    await User.create({
+      username: data.username,
+      email: data.email,
+      passwordHash,
+      phone: data.phone,
+      address: data.address,
+      isAdmin: data.isAdmin,
+      isActive: data.isActive,
     });
-    await newUser.save();
-  } catch (error) {
-    throw new Error("Error creating user");
+  } catch {
+    return { status: "error", message: "Could not create user." };
   }
-
   revalidatePath("/dashboard/users");
-  redirect("/dashboard/users");
-};
+  return { status: "success", message: "User created." };
+}
 
-export const deleteUser = async (formData: any) => {
-  const { id } = Object.fromEntries(formData);
+export async function updateUser(
+  _prev: ActionState,
+  formData: FormData,
+): Promise<ActionState> {
+  await requireUser();
+  const id = String(formData.get("id") ?? "");
+  const data = parse(formData);
+  const error = validate(data, false);
+  if (error) return { status: "error", message: error };
+
+  if (!hasDb()) return { status: "success", message: "Updated in demo mode." };
 
   try {
-    connectToDB();
+    await connectToDB();
+    const update: Record<string, unknown> = {
+      username: data.username,
+      email: data.email,
+      phone: data.phone,
+      address: data.address,
+      isAdmin: data.isAdmin,
+      isActive: data.isActive,
+    };
+    if (data.password)
+      update.passwordHash = await bcrypt.hash(data.password, 10);
+    await User.findByIdAndUpdate(id, update);
+  } catch {
+    return { status: "error", message: "Could not update user." };
+  }
+  revalidatePath("/dashboard/users");
+  return { status: "success", message: "User updated." };
+}
+
+export async function deleteUser(id: string): Promise<ActionState> {
+  await requireUser();
+  if (!hasDb()) return { status: "success", message: "Removed (demo mode)." };
+  try {
+    await connectToDB();
     await User.findByIdAndDelete(id);
-  } catch (error) {
-    throw new Error("Error deleting user");
+  } catch {
+    return { status: "error", message: "Could not delete user." };
   }
-
   revalidatePath("/dashboard/users");
-};
-
-export const updateUser = async (formData: any) => {
-  const { id, username, email, password, phone, address, isAdmin, isActive } =
-    Object.fromEntries(formData);
-
-  try {
-    connectToDB();
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
-    await User.findByIdAndUpdate(id, {
-      username,
-      email,
-      passwordHash: hashedPassword,
-      phone,
-      address,
-      isAdmin,
-      isActive,
-    });
-  } catch (error) {
-    throw new Error("Error updating user");
-  }
-
-  revalidatePath("/dashboard/users");
-  redirect("/dashboard/users");
-};
+  return { status: "success", message: "User deleted." };
+}
