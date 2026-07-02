@@ -13,9 +13,11 @@ import {
   PopoverTrigger,
 } from "@/app/ui/primitives/popover";
 import { ACTIVITY_META } from "@/app/ui/activity/activity-meta";
-import type { ActivityItem } from "@/app/lib/types";
+import { useSimulator } from "@/app/providers/simulator-provider";
 
-export function Notifications({ items }: { items: ActivityItem[] }) {
+export function Notifications() {
+  const { activity } = useSimulator();
+  const items = activity.slice(0, 12);
   const [readIds, setReadIds] = React.useState<Set<string>>(new Set());
 
   const unread = items.filter((i) => !readIds.has(i.id)).length;

@@ -3,9 +3,9 @@ import type { Metadata } from "next";
 import { getDashboardData } from "@/app/lib/data";
 import { KpiCards } from "@/app/ui/overview/kpi-cards";
 import { CategoryBars } from "@/app/ui/overview/category-bars";
-import { RecentTransactions } from "@/app/ui/overview/recent-transactions";
+import { LiveTransactions } from "@/app/ui/overview/live-transactions";
 import { TopProducts } from "@/app/ui/overview/top-products";
-import { ActivityFeed } from "@/app/ui/overview/activity-feed";
+import { LiveActivity } from "@/app/ui/overview/live-activity";
 import { RevenueAreaChart } from "@/app/ui/charts/revenue-area-chart";
 import { OrdersBarChart } from "@/app/ui/charts/orders-bar-chart";
 import { TrafficDonut } from "@/app/ui/charts/traffic-donut";
@@ -89,11 +89,8 @@ export default async function DashboardPage() {
       <TopProducts data={d.topProducts} />
 
       <div className="grid items-stretch gap-4 lg:grid-cols-12 lg:gap-6">
-        <RecentTransactions
-          data={d.transactions}
-          className="h-full lg:col-span-8"
-        />
-        <ActivityFeed data={d.activity} className="h-full lg:col-span-4" />
+        <LiveTransactions className="h-full lg:col-span-8" />
+        <LiveActivity className="h-full lg:col-span-4" />
       </div>
     </div>
   );

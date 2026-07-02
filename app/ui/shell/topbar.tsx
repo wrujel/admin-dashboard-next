@@ -6,11 +6,11 @@ import { MenuIcon, SearchIcon } from "lucide-react";
 import { navItems } from "./nav";
 import { ThemeToggle } from "./theme-toggle";
 import { Notifications } from "./notifications";
+import { SimulationToggle } from "./simulation-toggle";
 import { UserMenu } from "./user-menu";
 import { Button } from "@/app/ui/primitives/button";
 import { Separator } from "@/app/ui/primitives/separator";
 import type { SessionUser } from "@/app/lib/auth/dal";
-import type { ActivityItem } from "@/app/lib/types";
 
 function titleFor(pathname: string) {
   const exact = navItems.find((i) => i.href === pathname);
@@ -25,12 +25,10 @@ function titleFor(pathname: string) {
 
 export function Topbar({
   user,
-  activity,
   onOpenCommand,
   onOpenMobile,
 }: {
   user: SessionUser;
-  activity: ActivityItem[];
   onOpenCommand: () => void;
   onOpenMobile: () => void;
 }) {
@@ -51,10 +49,7 @@ export function Topbar({
       <h1 className="truncate text-sm font-semibold tracking-tight">
         {titleFor(pathname)}
       </h1>
-      <span className="ml-1.5 hidden items-center gap-1.5 sm:flex">
-        <span className="bg-positive pulse-dot size-1.5 rounded-full" />
-        <span className="text-muted-foreground text-xs">Live</span>
-      </span>
+      <SimulationToggle />
 
       <div className="ml-auto flex items-center gap-1.5">
         <button
@@ -77,7 +72,7 @@ export function Topbar({
           <SearchIcon />
         </Button>
 
-        <Notifications items={activity} />
+        <Notifications />
 
         <ThemeToggle />
         <Separator orientation="vertical" className="mx-1 h-6" />

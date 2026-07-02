@@ -9,15 +9,12 @@ import { Topbar } from "./topbar";
 import { MobileSidebar } from "./mobile-sidebar";
 import { CommandMenu } from "./command-menu";
 import type { SessionUser } from "@/app/lib/auth/dal";
-import type { ActivityItem } from "@/app/lib/types";
 
 export function DashboardShell({
   user,
-  activity,
   children,
 }: {
   user: SessionUser;
-  activity: ActivityItem[];
   children: React.ReactNode;
 }) {
   const [collapsed, setCollapsed] = React.useState(false);
@@ -50,7 +47,6 @@ export function DashboardShell({
       <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
         <Topbar
           user={user}
-          activity={activity}
           onOpenCommand={() => setCommandOpen(true)}
           onOpenMobile={() => setMobileOpen(true)}
         />
