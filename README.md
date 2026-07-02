@@ -1,9 +1,9 @@
 <div align='center'>
 
-  [![demo][demo]][demo-link]
-  [![status][status]][status-link]
-  [![deploy][deploy]](/)
-  [![test][tests]][tests-link]
+[![demo][demo]][demo-link]
+[![status][status]][status-link]
+[![deploy][deploy]](/)
+[![test][tests]][tests-link]
 
 </div>
 
@@ -18,29 +18,31 @@
 </div>
 
 <div align='center'>
-  <h1>Admin Dashboard with Next.js</h1>
+  <h1>Nexus — Admin Dashboard with Next.js</h1>
 </div>
 
 <div align='center'>
 
-  [![Next.js][nextjs]][nextjs-link]
-  [![TypeScript][typescript]][typescript-link]
-  [![Tailwind CSS][tailwindcss]][tailwindcss-link]
-  [![React][react]][react-link]
-  [![Next-Auth][next-auth]][next-auth-link]
-  [![Mongoose][mongoose]][mongoose-link]
-  [![MongoDB][mongodb]][mongodb-link]
-  [![Bcrypt][bcrypt]][bcrypt-link]
-  [![React Icons][react-icons]][react-icons-link]
-  [![Recharts][recharts]][recharts-link]
-  [![Use-Debounce][use-debounce]][use-debounce-link]
+[![Next.js][nextjs]][nextjs-link]
+[![React][react]][react-link]
+[![TypeScript][typescript]][typescript-link]
+[![Tailwind CSS][tailwindcss]][tailwindcss-link]
+[![Better Auth][better-auth]][better-auth-link]
+[![MongoDB][mongodb]][mongodb-link]
+[![Mongoose][mongoose]][mongoose-link]
+[![Recharts][recharts]][recharts-link]
+[![TanStack Table][tanstack]][tanstack-link]
+[![Radix UI][radix]][radix-link]
+[![Motion][motion]][motion-link]
+[![Bcrypt][bcrypt]][bcrypt-link]
 
 </div>
 
 <div align='center'>
-  Admin Dashboard app built with Next.js 14, TypeScript, Tailwind CSS, NextAuth v5, and MongoDB. Manage users and products with full CRUD operations, interactive charts, search with debounce, and pagination.
+  A dense, real-time admin dashboard ("Nexus") built with Next.js 16, React 19, Tailwind CSS v4, Better Auth and MongoDB. Manage users and products with generic data tables, explore analytics with animated charts, and watch a client-side ecommerce simulator stream transactions and activity every second.
 
-  [Demo]({{DEMO_URL}}) · [Report issue](/issues) · [Suggest something](/issues)
+[Demo][demo-link] · [Report issue](/issues) · [Suggest something](/issues)
+
 </div>
 
 ## Table of Contents
@@ -53,6 +55,7 @@
   - [Installation](#installation)
   - [Running locally](#running-locally)
   - [Build](#build)
+  - [Seeding products](#seeding-products)
 - [Environment Variables](#environment-variables)
 - [Project Structure](#project-structure)
 - [Demo](#demo)
@@ -63,44 +66,49 @@
 
 ## Features
 
-- [x] Authentication with NextAuth v5 (credentials provider)
-- [x] User management (create, read, update, delete)
-- [x] Product management (create, read, update, delete)
-- [x] Dashboard overview with summary cards
-- [x] Interactive line charts with Recharts
-- [x] Latest transactions display
-- [x] Search functionality with debounce
-- [x] Pagination for users and products lists
-- [x] Sidebar navigation with grouped menu items
+- [x] Secure authentication with Better Auth (email/password, database sessions, rate limiting)
+- [x] Auth enforced in the data-access layer, not middleware-only (resilient to CVE-2025-29927)
+- [x] Secure-by-config: runs in an open demo mode until `MONGO_URI` + a secret are set
+- [x] Dense, animated dashboard: KPI cards, revenue/profit area chart, orders bar chart
+- [x] Analytics section with a Revenue view (7D / 30D / quarter / semester / year range filter) and Reports
+- [x] Generic, type-safe data tables (TanStack Table) with sorting, filtering, pagination and column controls
+- [x] Users & Products CRUD via React 19 server actions, optimistic updates and toasts
+- [x] Random product seed script — batched, resilient and guaranteed-unique
+- [x] Live client-side data simulator — a transaction and an activity every second, with a start/pause toggle
+- [x] Command palette (⌘K), notification popover synced to the activity feed
+- [x] Dark / light theming with `next-themes` and OKLCH design tokens
+- [x] shadcn-style component primitives (Radix UI + CVA) animated with Motion
+- [x] Mock-first data layer with a graceful MongoDB fallback (never blocks a render)
 - [x] Password hashing with bcrypt
-- [x] Middleware-based route protection
-- [x] Responsive design with Tailwind CSS
-- [x] CSS Modules for component-scoped styling
-- [x] Server Actions for form handling
-- [x] MongoDB database with Mongoose ODM
+- [x] Built on the Next.js 16 App Router + React 19 with Turbopack; deployed on Vercel
 
 ## Tech Stack
 
-- [Next.js 14](https://nextjs.org/)
+- [Next.js 16](https://nextjs.org/)
+- [React 19](https://react.dev/)
 - [TypeScript](https://www.typescriptlang.org/)
-- [Tailwind CSS](https://tailwindcss.com/)
-- [React 18](https://react.dev/)
-- [NextAuth v5](https://next-auth.js.org/)
-- [Mongoose](https://mongoosejs.com/)
+- [Tailwind CSS v4](https://tailwindcss.com/)
+- [Better Auth](https://www.better-auth.com/)
 - [MongoDB](https://www.mongodb.com/)
+- [Mongoose](https://mongoosejs.com/)
+- [Recharts](https://recharts.org/)
+- [TanStack Table](https://tanstack.com/table/latest)
+- [Radix UI](https://www.radix-ui.com/)
+- [Motion](https://motion.dev/)
+- [next-themes](https://github.com/pacocoursey/next-themes)
+- [Sonner](https://sonner.emilkowal.ski/)
+- [cmdk](https://cmdk.paco.me/)
 - [Bcrypt](https://www.npmjs.com/package/bcrypt)
-- [React Icons](https://react-icons.github.io/react-icons/)
-- [Recharts](https://recharts.org/en-US/)
-- [Use-Debounce](https://www.npmjs.com/package/use-debounce)
+- [tsx](https://github.com/privatenumber/tsx)
 - [Vercel](https://vercel.com/)
 
 ## Getting Started
 
 ### Prerequisites
 
-- Node.js 18+
+- Node.js 20.9+ (required by Next.js 16)
 - npm
-- A MongoDB Atlas account or local MongoDB instance
+- A MongoDB Atlas account or local MongoDB instance (optional — the app runs with demo data without one)
 
 ### Installation
 
@@ -124,57 +132,47 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 npm run build
 ```
 
+### Seeding products
+
+Insert random products into your database (batched, resilient, unique names):
+
+```bash
+npm run seed:products              # insert 1000 products (batches of 100)
+npm run seed:products -- 250       # insert 250
+npm run seed:products -- --reset 500  # wipe the collection first, then 500
+npm run seed:products -- --dry-run    # preview only, writes nothing
+```
+
 ## Environment Variables
 
-To run this project, you will need to add the following environment variables to your `.env` file.
+The app runs in an open demo mode with mock data out of the box. Add the following to your `.env` file to connect a database and enable real authentication.
 
-| Variable      | Description                               | Required |
-| :------------ | :---------------------------------------- | :------: |
-| `MONGO_URI`   | MongoDB connection string                 |   Yes    |
-| `AUTH_SECRET` | Secret for NextAuth v5 session encryption |   Yes    |
+| Variable             | Description                                                                                 | Required |
+| :------------------- | :------------------------------------------------------------------------------------------ | :------: |
+| `MONGO_URI`          | MongoDB connection string. Without it, the app serves demo/mock data.                       |    No    |
+| `BETTER_AUTH_SECRET` | 32+ char secret for session encryption. Enables real auth (`AUTH_SECRET` is also accepted). |    No    |
 
 ## Project Structure
 
 ```
 /
 ├── app/
-│   ├── actions/
-│   │   ├── auth.actions.ts
-│   │   ├── product.actions.ts
-│   │   └── user.actions.ts
-│   ├── dashboard/
-│   │   ├── products/
-│   │   │   ├── [id]/
-│   │   │   └── add/
-│   │   └── users/
-│   │       ├── [id]/
-│   │       └── add/
-│   ├── lib/
-│   │   └── utils.ts
-│   ├── login/
-│   ├── models/
-│   │   ├── product.ts
-│   │   └── user.ts
-│   ├── services/
-│   │   ├── products.service.ts
-│   │   └── users.service.ts
-│   └── ui/
-│       └── dashboard/
-│           ├── card/
-│           ├── chart/
-│           ├── navbar/
-│           ├── pagination/
-│           ├── search/
-│           ├── sidebar/
-│           └── ...
-├── public/
-│   └── images/
-├── auth.js
-├── authconfig.js
-├── middleware.js
+│   ├── actions/            # Server actions (auth, users, products)
+│   ├── api/auth/           # Better Auth route handler
+│   ├── dashboard/          # Overview, analytics (revenue/reports), users, products, settings, activity
+│   ├── lib/                # Data layer, auth (config/dal), fixtures, simulator, types
+│   ├── login/              # Login page
+│   ├── models/             # Mongoose models (user, product)
+│   ├── providers/          # Theme + simulator providers
+│   ├── ui/                 # primitives, charts, data-table, shell, overview, widgets, ...
+│   └── layout.tsx
+├── scripts/
+│   └── seed-products.ts    # Random product seeder (run via tsx)
+├── public/images/
+├── eslint.config.mjs
 ├── next.config.mjs
-├── package.json
-├── tailwind.config.ts
+├── postcss.config.mjs
+├── proxy.js                # Better Auth optimistic route protection (formerly middleware)
 └── tsconfig.json
 ```
 
@@ -187,27 +185,39 @@ You can check out the demo:
 ## Troubleshooting
 
 <details>
-<summary>npm install fails with ERESOLVE</summary>
+<summary>npm install fails with ERESOLVE (React 19 peer deps)</summary>
 
-Try running with the legacy peer deps flag:
+Some libraries lag on React 19 peer ranges. Retry with:
+
 ```bash
 npm install --legacy-peer-deps
 ```
+
+</details>
+
+<details>
+<summary>The dashboard shows "Demo data"</summary>
+
+That's expected when `MONGO_URI` is not set — the app falls back to mock data. Add `MONGO_URI` (and a `BETTER_AUTH_SECRET`) to your `.env` to load real data and enable authentication.
+
 </details>
 
 <details>
 <summary>MongoDB connection errors</summary>
 
-Make sure your `MONGO_URI` environment variable is correctly set and your MongoDB instance is running. If using MongoDB Atlas, ensure your IP address is whitelisted in the Network Access settings.
+Make sure your `MONGO_URI` is correct and the database is reachable. If using MongoDB Atlas, add your IP address under Network Access.
+
 </details>
 
 <details>
-<summary>NextAuth errors</summary>
+<summary>Better Auth warns about a low-entropy secret</summary>
 
-Ensure you have set the `AUTH_SECRET` environment variable. You can generate one with:
+Set a strong `BETTER_AUTH_SECRET` (32+ characters). You can generate one with:
+
 ```bash
-npx auth secret
+openssl rand -base64 32
 ```
+
 </details>
 
 ## Authors
@@ -231,37 +241,41 @@ This project is licensed under the [MIT License](LICENSE).
 ---
 
 <!-- Badges -->
+
 [nextjs]: https://img.shields.io/badge/Next.js-black?style=for-the-badge&logo=next.js
+[react]: https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB
 [typescript]: https://img.shields.io/badge/Typescript-007ACC?style=for-the-badge&logo=typescript&logoColor=white&color=blue
 [tailwindcss]: https://img.shields.io/badge/Tailwind%20CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white
-[react]: https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB
-[next-auth]: https://img.shields.io/badge/Next--Auth-black?style=for-the-badge&logo=next.js
-[mongoose]: https://img.shields.io/badge/Mongoose-2A2A2A?style=for-the-badge&logo=mongoose&logoColor=white
+[better-auth]: https://img.shields.io/badge/Better%20Auth-1A1A1A?style=for-the-badge&logo=betterauth&logoColor=white
 [mongodb]: https://img.shields.io/badge/MongoDB-47A248?style=for-the-badge&logo=mongodb&logoColor=white
+[mongoose]: https://img.shields.io/badge/Mongoose-880000?style=for-the-badge&logo=mongoose&logoColor=white
+[recharts]: https://img.shields.io/badge/Recharts-22B5BF?style=for-the-badge&logo=chartdotjs&logoColor=white
+[tanstack]: https://img.shields.io/badge/TanStack%20Table-FF4154?style=for-the-badge&logo=reactquery&logoColor=white
+[radix]: https://img.shields.io/badge/Radix%20UI-161618?style=for-the-badge&logo=radixui&logoColor=white
+[motion]: https://img.shields.io/badge/Motion-000000?style=for-the-badge&logo=framer&logoColor=white
 [bcrypt]: https://img.shields.io/badge/Bcrypt-2A2A2A?style=for-the-badge&logo=npm&logoColor=white
-[react-icons]: https://img.shields.io/badge/React--Icons-20232A?style=for-the-badge&logo=react&logoColor=61DAFB
-[recharts]: https://img.shields.io/badge/Recharts-20232A?style=for-the-badge&logo=react&logoColor=61DAFB
-[use-debounce]: https://img.shields.io/badge/Use--Debounce-2A2A2A?style=for-the-badge&logo=npm&logoColor=white
 
 <!-- Badges links -->
+
 [nextjs-link]: https://nextjs.org/
+[react-link]: https://react.dev/
 [typescript-link]: https://www.typescriptlang.org/
 [tailwindcss-link]: https://tailwindcss.com/
-[react-link]: https://react.dev/
-[next-auth-link]: https://next-auth.js.org/
-[mongoose-link]: https://mongoosejs.com/
+[better-auth-link]: https://www.better-auth.com/
 [mongodb-link]: https://www.mongodb.com/
+[mongoose-link]: https://mongoosejs.com/
+[recharts-link]: https://recharts.org/
+[tanstack-link]: https://tanstack.com/table/latest
+[radix-link]: https://www.radix-ui.com/
+[motion-link]: https://motion.dev/
 [bcrypt-link]: https://www.npmjs.com/package/bcrypt
-[react-icons-link]: https://react-icons.github.io/react-icons/
-[recharts-link]: https://recharts.org/en-US/
-[use-debounce-link]: https://www.npmjs.com/package/use-debounce
 
 <!-- Status/Demo badges -->
-[demo]: https://img.shields.io/badge/🚀%20Live%20Demo-000000?style=for-the-badge&&logoColor=white&color=0a6bdb
-[status-link]: https://github.com/wrujel/monitor-repos
-[tests-link]: https://github.com/wrujel/monitor-tests
 
+[demo]: https://img.shields.io/badge/🚀%20Live%20Demo-000000?style=for-the-badge&&logoColor=white&color=0a6bdb
 [demo-link]: https://admin-dashboard-next-roan.vercel.app/
 [status]: https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fwrujel%2Fmonitor-repos%2Fmain%2Fdata%2Fadmin-dashboard-next.json
+[status-link]: https://github.com/wrujel/monitor-repos
 [deploy]: https://img.shields.io/github/deployments/wrujel/admin-dashboard-next/production?style=for-the-badge&label=Deploy
 [tests]: https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fwrujel%2Fmonitor-tests%2Fmain%2Fdata%2Fadmin-dashboard-next.json
+[tests-link]: https://github.com/wrujel/monitor-tests

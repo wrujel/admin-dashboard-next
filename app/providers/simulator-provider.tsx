@@ -2,71 +2,87 @@
 
 import * as React from "react";
 
-import type { ActivityItem, TransactionRow } from "@/app/lib/types";
-import { nextActivity, nextTransaction } from "@/app/lib/simulator";
+import {
+  createSimulation,
+  tickSimulation,
+  type SimulationSeed,
+  type SimulationSnapshot,
+} from "@/app/lib/simulator";
 
-const TX_CAP = 20;
-const ACTIVITY_CAP = 60;
 const TICK_MS = 1000;
+const SPEEDS: readonly number[] = [1, 2, 4];
 
-interface SimulatorContextValue {
-  transactions: TransactionRow[];
-  activity: ActivityItem[];
+interface SimulatorControls {
   running: boolean;
+  speed: number;
   toggle: () => void;
+  cycleSpeed: () => void;
 }
 
-const SimulatorContext = React.createContext<SimulatorContextValue | null>(
-  null,
-);
+const DataContext = React.createContext<SimulationSnapshot | null>(null);
+const ControlsContext = React.createContext<SimulatorControls | null>(null);
 
 /**
- * Holds the live, client-only ecommerce stream. Seeded from data loaded on the
- * server (DB or mock); from then on it generates one transaction + one activity
- * per second entirely in the browser — it never writes to the database.
+ * Holds the live, client-only store simulation. Seeded deterministically from
+ * data loaded on the server (DB or mock), then advanced one tick per second in
+ * the browser — it never writes to the database. Data and controls live in
+ * separate contexts so control consumers (topbar chip) don't re-render on
+ * every tick.
  */
 export function SimulatorProvider({
-  initialTransactions,
-  initialActivity,
+  seed,
   children,
 }: {
-  initialTransactions: TransactionRow[];
-  initialActivity: ActivityItem[];
+  seed: SimulationSeed;
   children: React.ReactNode;
 }) {
-  const [transactions, setTransactions] =
-    React.useState<TransactionRow[]>(initialTransactions);
-  const [activity, setActivity] =
-    React.useState<ActivityItem[]>(initialActivity);
+  const [snapshot, setSnapshot] = React.useState(() => createSimulation(seed));
   const [running, setRunning] = React.useState(true);
+  const [speed, setSpeed] = React.useState(1);
 
   React.useEffect(() => {
     if (!running) return;
-    const interval = setInterval(() => {
-      setTransactions((prev) => [nextTransaction(), ...prev].slice(0, TX_CAP));
-      setActivity((prev) => [nextActivity(), ...prev].slice(0, ACTIVITY_CAP));
-    }, TICK_MS);
+    const interval = setInterval(
+      () => setSnapshot((prev) => tickSimulation(prev, speed)),
+      TICK_MS,
+    );
     return () => clearInterval(interval);
-  }, [running]);
+  }, [running, speed]);
 
-  const toggle = React.useCallback(() => setRunning((r) => !r), []);
-
-  const value = React.useMemo<SimulatorContextValue>(
-    () => ({ transactions, activity, running, toggle }),
-    [transactions, activity, running, toggle],
+  const controls = React.useMemo<SimulatorControls>(
+    () => ({
+      running,
+      speed,
+      toggle: () => setRunning((r) => !r),
+      cycleSpeed: () =>
+        setSpeed((s) => SPEEDS[(SPEEDS.indexOf(s) + 1) % SPEEDS.length]),
+    }),
+    [running, speed],
   );
 
   return (
-    <SimulatorContext.Provider value={value}>
-      {children}
-    </SimulatorContext.Provider>
+    <ControlsContext.Provider value={controls}>
+      <DataContext.Provider value={snapshot}>{children}</DataContext.Provider>
+    </ControlsContext.Provider>
   );
 }
 
-export function useSimulator() {
-  const ctx = React.useContext(SimulatorContext);
+/** The live snapshot — re-renders consumers on every tick. */
+export function useSimulator(): SimulationSnapshot {
+  const ctx = React.useContext(DataContext);
   if (!ctx) {
     throw new Error("useSimulator must be used within a SimulatorProvider");
+  }
+  return ctx;
+}
+
+/** Pause/resume + speed — changes only when the user toggles them. */
+export function useSimulatorControls(): SimulatorControls {
+  const ctx = React.useContext(ControlsContext);
+  if (!ctx) {
+    throw new Error(
+      "useSimulatorControls must be used within a SimulatorProvider",
+    );
   }
   return ctx;
 }

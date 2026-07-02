@@ -14,20 +14,8 @@ import type {
   UserRow,
   UserStatus,
 } from "./types";
-
-/* -------------------------------------------------------------------------- */
-/*  Deterministic PRNG so the demo data is stable across renders/builds        */
-/* -------------------------------------------------------------------------- */
-
-function mulberry32(seed: number) {
-  return function () {
-    seed |= 0;
-    seed = (seed + 0x6d2b79f5) | 0;
-    let t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
-    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
-    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-  };
-}
+import { CATALOG } from "./fixtures";
+import { mulberry32 } from "./prng";
 
 const rng = mulberry32(0xc0ffee);
 const rand = (min: number, max: number) => min + rng() * (max - min);
@@ -147,14 +135,16 @@ export function revenueSeries(days = 30): RevenuePoint[] {
     const revenue = Math.round(
       base + wave + drift - (weekend ? 1500 : 0) + rand(-400, 400),
     );
-    const orders = Math.round(revenue / rand(58, 74));
+    // AOV matches the catalog the simulator sells from (~$380–520/basket),
+    // so live days accumulate to the same scale as seeded ones.
+    const orders = Math.round(revenue / rand(380, 520));
     points.push({
       date: d.toISOString(),
       label: d.toLocaleDateString("en-US", { month: "short", day: "numeric" }),
       revenue,
       profit: Math.round(revenue * rand(0.32, 0.46)),
       orders,
-      visitors: Math.round(orders * rand(11, 18)),
+      visitors: Math.round(orders * rand(12, 19)),
     });
   }
   return points;
@@ -205,18 +195,28 @@ export function transactions(n = 8): TransactionRow[] {
   });
 }
 
+/**
+ * Leaders are the catalog items with the highest expected revenue
+ * (popularity × price), and each row stays coherent: revenue ≈ units × price.
+ * The live simulator seeds from these rows and keeps incrementing them.
+ */
 export function topProducts(n = 6): TopProduct[] {
-  return Array.from({ length: n }, (_, i) => {
-    const units = randInt(120, 1900);
-    return {
-      id: id("prod", i),
-      name: PRODUCT_NAMES[i % PRODUCT_NAMES.length],
-      category: pick(CATEGORIES),
-      units,
-      revenue: Math.round(units * rand(80, 420)),
-      trend: Array.from({ length: 12 }, () => randInt(20, 100)),
-    };
-  }).sort((a, b) => b.revenue - a.revenue);
+  const leaders = [...CATALOG]
+    .sort((a, b) => b.weight * b.price - a.weight * a.price)
+    .slice(0, n);
+  return leaders
+    .map((entry, i) => {
+      const units = Math.round(entry.weight * rand(22, 38));
+      return {
+        id: id("prod", i),
+        name: entry.name,
+        category: entry.category,
+        units,
+        revenue: Math.round(units * entry.price * rand(0.94, 1)),
+        trend: Array.from({ length: 12 }, () => randInt(20, 100)),
+      };
+    })
+    .sort((a, b) => b.revenue - a.revenue);
 }
 
 const ACTIVITY_TEMPLATES: {

@@ -19,8 +19,16 @@ export default async function DashboardLayout({
 
   return (
     <SimulatorProvider
-      initialTransactions={data.transactions}
-      initialActivity={activity}
+      seed={{
+        kpis: data.kpis,
+        revenue: data.revenue,
+        categories: data.categories,
+        traffic: data.traffic,
+        topProducts: data.topProducts,
+        transactions: data.transactions,
+        activity,
+        counts: data.counts,
+      }}
     >
       <DashboardShell user={user}>{children}</DashboardShell>
     </SimulatorProvider>

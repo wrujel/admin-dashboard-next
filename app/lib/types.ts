@@ -107,5 +107,6 @@ export interface DashboardData {
   transactions: TransactionRow[];
   topProducts: TopProduct[];
   activity: ActivityItem[];
+  counts: { users: number; products: number };
   source: "live" | "demo";
 }
