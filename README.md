@@ -18,7 +18,7 @@
 </div>
 
 <div align='center'>
-  <h1>Nexus — Admin Dashboard with Next.js</h1>
+  <h1>Admin Dashboard with Next</h1>
 </div>
 
 <div align='center'>
