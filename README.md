@@ -39,7 +39,7 @@
 </div>
 
 <div align='center'>
-  A dense, real-time admin dashboard ("Nexus") built with Next.js 16, React 19, Tailwind CSS v4, Better Auth and MongoDB. Manage users and products with generic data tables, explore analytics with animated charts, and watch a client-side ecommerce simulator stream transactions and activity every second.
+  A dense, real-time admin dashboard built with Next.js 16, React 19, Tailwind CSS v4, Better Auth and MongoDB. Manage users and products with generic data tables, explore analytics with animated charts, and watch a client-side ecommerce simulator stream transactions and activity every second.
 
 [Demo][demo-link] · [Report issue](/issues) · [Suggest something](/issues)
 
