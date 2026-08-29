@@ -1,0 +1,39 @@
+# pnpm settings for this project. pnpm 10+ reads its configuration from here,
+# which keeps npm from warning about unrecognised keys in .npmrc.
+
+# Postinstall scripts are blocked by default (supply-chain hardening). Only
+# these three are allowed, and each needs it to fetch or compile a native
+# binary: bcrypt (password hashing — a runtime dependency, so this matters in
+# production), esbuild (the Vite/Vitest bundler) and unrs-resolver (the ESLint
+# import resolver).
+#
+# Both spellings are declared on purpose: pnpm 11 reads `allowBuilds`, pnpm 10
+# reads `onlyBuiltDependencies`, and Vercel chooses its own pnpm version from
+# the lockfile rather than from the `packageManager` field. Declaring both
+# means bcrypt is compiled whichever one runs the install.
+allowBuilds:
+  bcrypt: true
+  esbuild: true
+  unrs-resolver: true
+
+onlyBuiltDependencies:
+  - bcrypt
+  - esbuild
+  - unrs-resolver
+
+# React 19 / Next 16 ranges are still catching up across the Radix and
+# charting ecosystem. Warn on peer mismatches rather than failing the install.
+strictPeerDependencies: false
+
+# Reproducible, non-interactive installs; CI additionally passes
+# --frozen-lockfile explicitly.
+preferFrozenLockfile: true
+
+# New releases are held back briefly by default so a compromised publish is
+# not picked up immediately. These versions were reviewed and pinned
+# deliberately during the dependency upgrade.
+minimumReleaseAgeExclude:
+  - "@tanstack/react-table@9.2.4"
+  - "@tanstack/table-core@9.2.4"
+  - "@vitejs/plugin-react@6.1.1"
+  - lucide-react@1.35.0
