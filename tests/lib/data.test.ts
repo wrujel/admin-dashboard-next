@@ -630,6 +630,12 @@ describe("getActivityFeed", () => {
   });
 
   it("is deterministic", async () => {
+    // Events are stamped from Date.now(), so the clock is frozen: two calls
+    // either side of a millisecond boundary differ on `date` alone and would
+    // make this flaky. The shared afterEach restores real timers.
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date("2026-06-24T12:00:00.000Z"));
+
     const { getActivityFeed } = await loadData();
     expect(await getActivityFeed(10)).toEqual(await getActivityFeed(10));
   });
