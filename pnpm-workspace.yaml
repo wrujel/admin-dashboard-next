@@ -1,16 +1,22 @@
-# pnpm settings for this project. pnpm 10+ reads its configuration from here,
-# which keeps npm from warning about unrecognised keys in .npmrc.
+# pnpm settings for this project. pnpm 10+ reads its configuration from here.
+#
+# `packages` is required even though this is a single-package repo: in pnpm 9
+# this file is strictly a workspace definition and pnpm refuses to install
+# without it ("packages field missing or empty"). Vercel selects its pnpm
+# version from the lockfile rather than from the packageManager field, so it
+# can and does run pnpm 9 here — omitting this key fails the deploy at install.
+packages:
+  - "."
 
-# Postinstall scripts are blocked by default (supply-chain hardening). Only
-# these three are allowed, and each needs it to fetch or compile a native
-# binary: bcrypt (password hashing — a runtime dependency, so this matters in
-# production), esbuild (the Vite/Vitest bundler) and unrs-resolver (the ESLint
-# import resolver).
+# Postinstall scripts are blocked by default from pnpm 10 (supply-chain
+# hardening). Only these three are allowed, and each needs one to fetch or
+# compile a native binary: bcrypt (password hashing — a runtime dependency, so
+# this matters in production), esbuild (the Vite/Vitest bundler) and
+# unrs-resolver (the ESLint import resolver).
 #
 # Both spellings are declared on purpose: pnpm 11 reads `allowBuilds`, pnpm 10
-# reads `onlyBuiltDependencies`, and Vercel chooses its own pnpm version from
-# the lockfile rather than from the `packageManager` field. Declaring both
-# means bcrypt is compiled whichever one runs the install.
+# reads `onlyBuiltDependencies`. pnpm 9 needs neither — it does not block
+# scripts at all.
 allowBuilds:
   bcrypt: true
   esbuild: true
@@ -29,9 +35,9 @@ strictPeerDependencies: false
 # --frozen-lockfile explicitly.
 preferFrozenLockfile: true
 
-# New releases are held back briefly by default so a compromised publish is
-# not picked up immediately. These versions were reviewed and pinned
-# deliberately during the dependency upgrade.
+# New releases are held back by default so a compromised publish is not picked
+# up immediately. Without these exclusions pnpm 11 rejects the lockfile
+# outright; these versions were reviewed and pinned during the upgrade.
 minimumReleaseAgeExclude:
   - "@tanstack/react-table@9.2.4"
   - "@tanstack/table-core@9.2.4"
