@@ -38,3 +38,6 @@ next-env.d.ts
 
 # vitest json reporter output (CI artefact)
 .vitest.json
+
+# dependency audit report (CI artefact)
+audit.json
