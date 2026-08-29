@@ -68,13 +68,22 @@ export const nav: NavGroup[] = [
   },
 ];
 
+/**
+ * Flattens nav groups to their navigable leaves. A parent with children
+ * contributes its children; a parent with only an href contributes itself;
+ * a section header with neither contributes nothing.
+ */
+export function flattenNav(groups: NavGroup[]): NavLeaf[] {
+  return groups.flatMap((g) =>
+    g.items.flatMap((i) =>
+      i.children
+        ? i.children
+        : i.href
+          ? [{ title: i.title, href: i.href, icon: i.icon }]
+          : [],
+    ),
+  );
+}
+
 /** Flat list of all navigable leaves (used by the command palette). */
-export const navItems: NavLeaf[] = nav.flatMap((g) =>
-  g.items.flatMap((i) =>
-    i.children
-      ? i.children
-      : i.href
-        ? [{ title: i.title, href: i.href, icon: i.icon }]
-        : [],
-  ),
-);
+export const navItems: NavLeaf[] = flattenNav(nav);

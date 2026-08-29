@@ -8,6 +8,8 @@ const eslintConfig = [
       ".next/**",
       "out/**",
       "build/**",
+      // Generated artefacts, not source.
+      "coverage/**",
       "next-env.d.ts",
     ],
   },
