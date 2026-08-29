@@ -15,6 +15,7 @@ import {
 
 import { DataTable } from "@/app/ui/data-table/data-table";
 import { DataTableColumnHeader } from "@/app/ui/data-table/data-table-column-header";
+import type { DataTableFeatures } from "@/app/ui/data-table/features";
 import { Badge } from "@/app/ui/primitives/badge";
 import { Button } from "@/app/ui/primitives/button";
 import {
@@ -103,7 +104,7 @@ export function ProductsTable({ data }: { data: ProductRow[] }) {
     [data, router],
   );
 
-  const columns = React.useMemo<ColumnDef<ProductRow>[]>(
+  const columns = React.useMemo<ColumnDef<DataTableFeatures, ProductRow>[]>(
     () => [
       {
         accessorKey: "name",

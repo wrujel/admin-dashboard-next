@@ -1,6 +1,6 @@
 "use client";
 
-import type { Column } from "@tanstack/react-table";
+import type { Column, RowData } from "@tanstack/react-table";
 import {
   ArrowDownIcon,
   ArrowUpIcon,
@@ -17,17 +17,21 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/app/ui/primitives/dropdown-menu";
+import type { DataTableFeatures } from "./features";
 
 interface DataTableColumnHeaderProps<
-  TData,
+  TData extends RowData,
   TValue,
 > extends React.HTMLAttributes<HTMLDivElement> {
-  column: Column<TData, TValue>;
+  column: Column<DataTableFeatures, TData, TValue>;
   title: string;
 }
 
 /** Sortable / hideable column header, fully generic over the table's data type. */
-export function DataTableColumnHeader<TData, TValue>({
+export function DataTableColumnHeader<
+  TData extends RowData,
+  TValue,
+>({
   column,
   title,
   className,

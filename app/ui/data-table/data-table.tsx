@@ -4,14 +4,11 @@ import * as React from "react";
 import {
   type ColumnDef,
   type ColumnFiltersState,
+  type RowData,
   type SortingState,
-  type VisibilityState,
+  type ColumnVisibilityState,
   flexRender,
-  getCoreRowModel,
-  getFilteredRowModel,
-  getPaginationRowModel,
-  getSortedRowModel,
-  useReactTable,
+  useTable,
 } from "@tanstack/react-table";
 import { motion } from "motion/react";
 import { SearchIcon, InboxIcon } from "lucide-react";
@@ -20,9 +17,10 @@ import { cn } from "@/lib/utils";
 import { Input } from "@/app/ui/primitives/input";
 import { DataTablePagination } from "./data-table-pagination";
 import { DataTableViewOptions } from "./data-table-view-options";
+import { type DataTableFeatures, dataTableFeatures } from "./features";
 
-export interface DataTableProps<TData, TValue> {
-  columns: ColumnDef<TData, TValue>[];
+export interface DataTableProps<TData extends RowData> {
+  columns: ColumnDef<DataTableFeatures, TData>[];
   data: TData[];
   /** Enables the global search box and sets its placeholder. */
   searchPlaceholder?: string;
@@ -40,7 +38,7 @@ export interface DataTableProps<TData, TValue> {
  * Handles sorting, global filtering, column visibility and pagination
  * for any row shape `TData`.
  */
-export function DataTable<TData, TValue>({
+export function DataTable<TData extends RowData>({
   columns,
   data,
   searchPlaceholder,
@@ -48,17 +46,18 @@ export function DataTable<TData, TValue>({
   pageSize = 10,
   emptyState,
   className,
-}: DataTableProps<TData, TValue>) {
+}: DataTableProps<TData>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     [],
   );
   const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>({});
+    React.useState<ColumnVisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
   const [globalFilter, setGlobalFilter] = React.useState("");
 
-  const table = useReactTable({
+  const table = useTable({
+    features: dataTableFeatures,
     data,
     columns,
     state: {
@@ -68,17 +67,13 @@ export function DataTable<TData, TValue>({
       rowSelection,
       globalFilter,
     },
-    initialState: { pagination: { pageSize } },
+    initialState: { pagination: { pageIndex: 0, pageSize } },
     enableRowSelection: true,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
     onColumnVisibilityChange: setColumnVisibility,
     onRowSelectionChange: setRowSelection,
     onGlobalFilterChange: setGlobalFilter,
-    getCoreRowModel: getCoreRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
-    getSortedRowModel: getSortedRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
   });
 
   return (

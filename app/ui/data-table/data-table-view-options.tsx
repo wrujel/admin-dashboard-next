@@ -1,6 +1,6 @@
 "use client";
 
-import type { Table } from "@tanstack/react-table";
+import type { RowData, Table } from "@tanstack/react-table";
 import { Settings2Icon } from "lucide-react";
 
 import { Button } from "@/app/ui/primitives/button";
@@ -12,12 +12,13 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/app/ui/primitives/dropdown-menu";
+import type { DataTableFeatures } from "./features";
 
 /** Column-visibility toggle, generic over the table's data type. */
-export function DataTableViewOptions<TData>({
+export function DataTableViewOptions<TData extends RowData>({
   table,
 }: {
-  table: Table<TData>;
+  table: Table<DataTableFeatures, TData>;
 }) {
   return (
     <DropdownMenu>

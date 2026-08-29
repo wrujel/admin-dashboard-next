@@ -1,6 +1,6 @@
 "use client";
 
-import type { Table } from "@tanstack/react-table";
+import type { ReactTable, RowData } from "@tanstack/react-table";
 import {
   ChevronLeftIcon,
   ChevronRightIcon,
@@ -16,9 +16,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/app/ui/primitives/select";
+import type { DataTableFeatures } from "./features";
 
 /** Pagination footer, generic over the table's data type. */
-export function DataTablePagination<TData>({ table }: { table: Table<TData> }) {
+export function DataTablePagination<TData extends RowData>({
+  table,
+}: {
+  table: ReactTable<DataTableFeatures, TData>;
+}) {
   const selected = table.getFilteredSelectedRowModel().rows.length;
   const total = table.getFilteredRowModel().rows.length;
 
@@ -42,11 +47,11 @@ export function DataTablePagination<TData>({ table }: { table: Table<TData> }) {
             Rows per page
           </p>
           <Select
-            value={`${table.getState().pagination.pageSize}`}
+            value={`${table.state.pagination.pageSize}`}
             onValueChange={(value) => table.setPageSize(Number(value))}
           >
             <SelectTrigger size="sm" className="h-8 w-[4.5rem]">
-              <SelectValue placeholder={table.getState().pagination.pageSize} />
+              <SelectValue placeholder={table.state.pagination.pageSize} />
             </SelectTrigger>
             <SelectContent side="top">
               {[5, 10, 20, 30, 50].map((pageSize) => (
@@ -58,7 +63,7 @@ export function DataTablePagination<TData>({ table }: { table: Table<TData> }) {
           </Select>
         </div>
         <div className="text-muted-foreground flex w-[5.5rem] items-center justify-center text-xs">
-          Page {table.getState().pagination.pageIndex + 1} of{" "}
+          Page {table.state.pagination.pageIndex + 1} of{" "}
           {table.getPageCount() || 1}
         </div>
         <div className="flex items-center gap-1">

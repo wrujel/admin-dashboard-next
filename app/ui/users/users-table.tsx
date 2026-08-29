@@ -15,6 +15,7 @@ import {
 
 import { DataTable } from "@/app/ui/data-table/data-table";
 import { DataTableColumnHeader } from "@/app/ui/data-table/data-table-column-header";
+import type { DataTableFeatures } from "@/app/ui/data-table/features";
 import { Avatar, AvatarFallback } from "@/app/ui/primitives/avatar";
 import { Badge } from "@/app/ui/primitives/badge";
 import { Button } from "@/app/ui/primitives/button";
@@ -108,7 +109,7 @@ export function UsersTable({ data }: { data: UserRow[] }) {
     [data, router],
   );
 
-  const columns = React.useMemo<ColumnDef<UserRow>[]>(
+  const columns = React.useMemo<ColumnDef<DataTableFeatures, UserRow>[]>(
     () => [
       {
         accessorKey: "name",
