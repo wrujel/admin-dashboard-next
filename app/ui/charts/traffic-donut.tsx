@@ -22,6 +22,11 @@ export function TrafficDonut({ data }: { data: TrafficDatum[] }) {
             outerRadius={88}
             paddingAngle={2}
             strokeWidth={0}
+            // recharts 3's pie entry animation leaves the sectors at zero
+            // width here, so nothing is drawn — the shape groups render empty.
+            // The donut is a static share-of-total read, and the live one
+            // re-renders every tick, which would restart the animation anyway.
+            isAnimationActive={false}
           >
             {data.map((d) => (
               <Cell key={d.source} fill={d.color} />
