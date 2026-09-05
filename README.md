@@ -11,7 +11,7 @@
   <a href='/'>
     <img
       src='screenshot.webp'
-      alt='Screenshot of the app'
+      alt='Dark admin dashboard overview with revenue, orders, active users and conversion tiles above revenue, traffic-source and sales-by-category charts.'
       width='100%'
     />
   </a>
@@ -39,7 +39,7 @@
 </div>
 
 <div align='center'>
-  A dense, real-time admin dashboard built with Next.js 16, React 19, Tailwind CSS v4, Better Auth and MongoDB. Manage users and products with generic data tables, explore analytics with animated charts, and watch a client-side ecommerce simulator stream transactions and activity every second.
+  A dense, real-time admin dashboard built with Next.js 16, React 19, Tailwind CSS v4, Better Auth and MongoDB. Manage users and products through generic, type-safe TanStack tables with sorting, filtering and column controls, explore revenue across 7-day to yearly ranges in animated Recharts panels, and watch a client-side simulator stream a transaction and an activity every second — with a command palette and OKLCH dark and light theming throughout.
 
 [Demo][demo-link] · [Report issue](/issues) · [Suggest something](/issues)
 
